@@ -1,0 +1,91 @@
+{
+  "name": "vitrine",
+  "version": "0.0.5",
+  "private": true,
+  "description": "On the go image streaming",
+  "homepage": "https://012.thewhodidthis.com",
+  "bugs": {
+    "url": "https://github.com/thewhodidthis/vitrine/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thewhodidthis/vitrine.git"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "sChzs BkgNns",
+    "email": "sotirios.bakagiannis@gmail.com",
+    "url": "https://www.thewhodidthis.com"
+  },
+  "main": "server.js",
+  "files": [
+    "server.js"
+  ],
+  "scripts": {
+    "prebuild": "mkdir -p public; rsync -r static/ public --delete --exclude=.git*",
+    "build": "npm run build:js && npm run build:css && npm run build:html",
+    "postbuild": "terser -cmo public/service-worker.js service-worker.js",
+    "build:css": "for file in *.css; do postcss -o public/$file $file; done",
+    "build:html": "mustache package.json index.mustache.php | php | tidy -w 0 -o public/index.html",
+    "build:js": "rollup -c node:x -f iife client.js | buble | terser -cmo public/index.js",
+    "forever": "forever -a --uid 012-vitrine start server.js",
+    "lint": "npm run lint:js && npm run lint:css",
+    "lint:css": "stylelint *.css",
+    "lint:js": "eslint *.js",
+    "start": "NODE_ENV=development node server",
+    "test": "npm run lint",
+    "watch": "rollup -w -c node:x -f iife client.js -o public/index.js"
+  },
+  "config": {
+    "date": "2013-20",
+    "port": "8012",
+    "title": "Xn--kxaeb2avwu"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "eslintConfig": {
+    "parserOptions": {
+      "ecmaVersion": 2018
+    },
+    "extends": "@thewhodidthis"
+  },
+  "stylelint": {
+    "extends": "stylelint-config-standard"
+  },
+  "dependencies": {
+    "@thewhodidthis/upload": "github:thewhodidthis/upload",
+    "ws": "^7.2.3"
+  },
+  "devDependencies": {
+    "@thewhodidthis/eslint-config": "^0.1.3",
+    "@thewhodidthis/reset.css": "^0.0.16",
+    "buble": "^0.20.0",
+    "cssnano": "^4.1.10",
+    "eslint": "^6.8.0",
+    "fullscream": "^1.0.14",
+    "picknick": "^4.1.6",
+    "postcss": "^7.0.27",
+    "postcss-cli": "^7.1.0",
+    "postcss-import": "^12.0.1",
+    "postcss-preset-env": "^6.7.0",
+    "rollup": "^2.6.1",
+    "rollup-config-x": "^2.0.1",
+    "stylelint": "^13.3.2",
+    "stylelint-config-standard": "^20.0.0",
+    "terser": "^4.6.11"
+  },
+  "engines": {
+    "node": ">=6.11.0",
+    "npm": ">=3.10.10"
+  },
+  "postcss": {
+    "plugins": {
+      "postcss-import": {},
+      "postcss-preset-env": {},
+      "cssnano": {
+        "autoprefixer": false
+      }
+    }
+  }
+}

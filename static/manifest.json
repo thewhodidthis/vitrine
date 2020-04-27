@@ -1,0 +1,30 @@
+{
+  "short_name": "Vitrine",
+  "name": "Vitrine",
+  "icons": [
+    {
+      "src": "icon-1x.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "icon-2x.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "icon-4x.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "poster-1x.png",
+      "type": "image/png",
+      "sizes": "1200x1200"
+    }
+  ],
+  "display": "fullscreen",
+  "theme_color": "#fff",
+  "background_color": "#fff",
+  "start_url": "index.html?launcher=true"
+}
