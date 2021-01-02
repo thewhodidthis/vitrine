@@ -22,7 +22,7 @@
     "server.js"
   ],
   "scripts": {
-    "prebuild": "mkdir -p public; rsync -r static/ public --delete --exclude=.git*",
+    "prebuild": "mkdir -p public; cp -r static/* public/",
     "build": "npm run build:js && npm run build:css && npm run build:html",
     "postbuild": "terser -cmo public/service-worker.js service-worker.js",
     "build:css": "for file in *.css; do postcss -o public/$file $file; done",
