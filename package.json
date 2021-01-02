@@ -28,7 +28,6 @@
     "build:css": "for file in *.css; do postcss -o public/$file $file; done",
     "build:html": "mustache package.json index.mustache.php | php | tidy -w 0 -o public/index.html",
     "build:js": "rollup -c node:x -f iife client.js | buble | terser -cmo public/index.js",
-    "forever": "forever -a --uid 012-vitrine start server.js",
     "lint": "npm run lint:js && npm run lint:css",
     "lint:css": "stylelint *.css",
     "lint:js": "eslint *.js",
