@@ -5,10 +5,10 @@ const path = require('path')
 const fs = require('fs')
 const uploader = require('@thewhodidthis/upload')
 
-const { CLIENT_ID, CONFIG = 'config.json', PORT = 8012, npm_package_config_port = PORT, MAX = 50 } = process.env
+const { CLIENT_ID, CONFIG = './config.json', PORT = 8012, npm_package_config_port = PORT, MAX = 50 } = process.env
 const { parse, stringify } = JSON
 
-const configPath = path.resolve(CONFIG)
+const configPath = path.resolve(__dirname, CONFIG)
 const config = require(configPath)
 const { uploads = [], clientId = CLIENT_ID } = config
 
