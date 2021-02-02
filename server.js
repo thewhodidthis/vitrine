@@ -1,21 +1,32 @@
 'use strict'
 
-const { Server } = require('ws')
+const { existsSync, readFileSync, writeFileSync } = require('fs')
 const path = require('path')
-const fs = require('fs')
+const https = require('https')
+const { Server } = require('ws')
 const uploader = require('@thewhodidthis/upload')
 
-const { CLIENT_ID, CONFIG = './config.json', PORT = 8012, npm_package_config_port = PORT, MAX = 50 } = process.env
+const { CLIENT_ID, CONFIG = './config.json', PORT = 8012, npm_package_config_port: port = PORT, MAX = 50 } = process.env
 const { parse, stringify } = JSON
 
 const configPath = path.resolve(__dirname, CONFIG)
 const config = require(configPath)
-const { uploads = [], clientId = CLIENT_ID } = config
+
+const { uploads = [], clientId = CLIENT_ID, cert, key } = config
+const options = { path: '/io' }
 
 const maxUploadSize = 2 * 1024 * 1024
 const upload = uploader(clientId)
 
-const io = new Server({ port: npm_package_config_port, path: '/io' })
+if (existsSync(cert) && existsSync(key)) {
+  options.server = https
+    .createServer({ cert: readFileSync(cert), key: readFileSync(key) })
+    .listen(port)
+} else {
+  options.port = port
+}
+
+const io = new Server(options)
 const broadcast = data => io.clients.forEach(client => client.send(stringify(data)))
 
 io.on('connection', (socket) => {
@@ -75,7 +86,7 @@ io.on('connection', (socket) => {
 
             // A cheap way of saving image URLs for recovery if need be
             try {
-              fs.writeFileSync(configPath, stringify({ ...config, uploads }, null, 2))
+              writeFileSync(configPath, stringify({ ...config, uploads }, null, 2))
             } catch (e) {
               console.error(e)
             }
